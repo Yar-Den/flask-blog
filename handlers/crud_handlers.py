@@ -2,7 +2,7 @@ from models import db, Tag, Category, Post
 from flask import request, redirect, render_template, abort
 
 
-def __create_post():
+def _create_post():
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
@@ -21,7 +21,7 @@ def __create_post():
                            categories=categories, tags=tags)
 
 
-def __create_category():
+def _create_category():
     if request.method == 'POST':
         name = request.form['name']
 
@@ -34,7 +34,7 @@ def __create_category():
     return render_template('create_category.html', categories=categories)
 
 
-def __create_tag():
+def _create_tag():
     if request.method == 'POST':
         name = request.form['name']
 
@@ -49,27 +49,27 @@ def __create_tag():
 
 def handle_create(type: str):
     if type == 'post':
-        return __create_post()
+        return _create_post()
     elif type == 'category':
-        return __create_category()
+        return _create_category()
     elif type == 'tag':
-        return __create_tag()
+        return _create_tag()
     else:
         abort(404)
 
 
-def __read_post():
+def _read_post():
     posts = Post.query.all()
     return render_template('index.html', posts=posts)
 
 
-def __read_by_category(id: int):
+def _read_by_category(id: int):
     category = Category.query.get_or_404(id)
     posts = Post.query.filter_by(category_id=id).all()
     return render_template('category.html', posts=posts, category=category)
 
 
-def __read_by_tag(id: int):
+def _read_by_tag(id: int):
     tag = Tag.query.get_or_404(id)
     posts = tag.posts.all()
     return render_template('tag.html', posts=posts, tag=tag)
@@ -77,11 +77,11 @@ def __read_by_tag(id: int):
 
 def handle_read(id: int = None, type: str = 'post'):
     if type == 'post':
-        return __read_post()
+        return _read_post()
     elif type == 'category':
-        return __read_by_category(id)
+        return _read_by_category(id)
     elif type == 'tag':
-        return __read_by_tag(id)
+        return _read_by_tag(id)
     else:
         abort(404)
 
@@ -105,21 +105,21 @@ def handle_update(id: int):
                            post=post, categories=categories, tags=tags)
 
 
-def __delete_post(id: int):
+def _delete_post(id: int):
     post = Post.query.get_or_404(id)
     db.session.delete(post)
     db.session.commit()
     return redirect('/')
 
 
-def __delete_category(id: int):
+def _delete_category(id: int):
     category = Category.query.get_or_404(id)
     db.session.delete(category)
     db.session.commit()
     return redirect('/create/category')
 
 
-def __delete_tag(id: int):
+def _delete_tag(id: int):
     tag = Tag.query.get_or_404(id)
     db.session.delete(tag)
     db.session.commit()
@@ -128,10 +128,10 @@ def __delete_tag(id: int):
 
 def handle_delete(id: int = None, type: str = 'post'):
     if type == 'post':
-        return __delete_post(id)
+        return _delete_post(id)
     elif type == 'category':
-        return __delete_category(id)
+        return _delete_category(id)
     elif type == 'tag':
-        return __delete_tag(id)
+        return _delete_tag(id)
     else:
         abort(404)

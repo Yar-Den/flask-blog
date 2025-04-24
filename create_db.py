@@ -1,5 +1,5 @@
 from flask import Flask
-from models import db, Tag, Post, Category
+from models import db, Tag, Category
 import os
 from dotenv import load_dotenv
 
