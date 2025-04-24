@@ -7,8 +7,10 @@ def __create_post():
         title = request.form['title']
         content = request.form['content']
         category_id = request.form['category']
+        tag_ids = request.form.getlist('tags')
 
         new_post = Post(title=title, content=content, category_id=category_id)
+        new_post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
 
         db.session.add(new_post)
         db.session.commit()
@@ -69,7 +71,7 @@ def __read_by_category(id: int):
 
 def __read_by_tag(id: int):
     tag = Tag.query.get_or_404(id)
-    posts = Post.query.filter_by(category_id=id).all()
+    posts = tag.posts.all()
     return render_template('tag.html', posts=posts, tag=tag)
 
 
@@ -90,6 +92,9 @@ def handle_update(id: int):
         post.title = request.form['title']
         post.content = request.form['content']
         post.category_id = request.form['category']
+
+        tag_ids = request.form.getlist('tags')
+        post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
 
         db.session.commit()
         return redirect('/')
@@ -123,7 +128,7 @@ def __delete_tag(id: int):
 
 def handle_delete(id: int = None, type: str = 'post'):
     if type == 'post':
-        return __delete_post()
+        return __delete_post(id)
     elif type == 'category':
         return __delete_category(id)
     elif type == 'tag':

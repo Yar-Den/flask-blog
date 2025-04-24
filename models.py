@@ -20,13 +20,13 @@ class Post(db.Model):
                             nullable=False)
 
     def __repr__(self):
-        return f'<Post {self.name}>'
+        return f'<Post {self.title}>'
 
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
-    post = db.relationship('Post', backref='category', lazy=True)
+    posts = db.relationship('Post', backref='category', lazy=True)
 
     def __repr__(self):
         return f'<Category {self.name}>'
@@ -35,8 +35,8 @@ class Category(db.Model):
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(25), unique=True, nullable=False)
-    post = db.relationship('Post', secondary=post_tags,
-                           backref=db.backref('tag', lazy=True))
+    posts = db.relationship('Post', secondary=post_tags,
+                            backref=db.backref('tags', lazy=True))
 
     def __repr__(self):
         return f'<Tag {self.name}>'
