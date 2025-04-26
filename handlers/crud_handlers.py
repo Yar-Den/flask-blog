@@ -76,7 +76,7 @@ def _read_by_category(id: int):
 
 def _read_by_tag(id: int):
     tag = Tag.query.get_or_404(id)
-    posts = tag.posts.all()
+    posts = tag.posts
     return render_template('by_tag.html', posts=posts, tag=tag)
 
 
@@ -124,11 +124,12 @@ def _delete_post(id: int):
     return redirect('/')
 
 
-def _delete_category(id: int):
-    category = Category.query.get_or_404(id)
-    db.session.delete(category)
-    db.session.commit()
-    return redirect('/create/category')
+# Удаление категорий невозможно - nullable False
+# def _delete_category(id: int):
+#     category = Category.query.get_or_404(id)
+#     db.session.delete(category)
+#     db.session.commit()
+#     return redirect('/create/category')
 
 
 def _delete_tag(id: int):
@@ -141,8 +142,8 @@ def _delete_tag(id: int):
 def handle_delete(id: int = None, type: str = 'post'):
     if type == 'post':
         return _delete_post(id)
-    elif type == 'category':
-        return _delete_category(id)
+    # elif type == 'category':
+    #     return _delete_category(id)
     elif type == 'tag':
         return _delete_tag(id)
     else:

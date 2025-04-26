@@ -6,9 +6,9 @@
 {% block content %}
     <div class="container main-container py-4">
         <div class="d-grid gap-2 d-md-block mb-4">
-            <button class="btn btn-primary me-2">Опубликовать новую запись</button>
-            <button class="btn btn-success me-2">Добавить тег</button>
-            <button class="btn btn-warning">Добавить категорию</button>
+            <a href="{{ url_for('create', type='post') }}" class="btn btn-primary me-2">Опубликовать новую запись</a>
+            <a href="{{ url_for('create', type='tag') }}" class="btn btn-success me-2">Добавить тег</a>
+            <a href="{{ url_for('create', type='category') }}" class="btn btn-warning">Добавить категорию</a>
         </div>
 
         <!-- Список постов -->
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-white d-flex justify-content-end">
-                    <a href="{{ url_for('edit', id=post.id) }}"
+                    <a href="{{ url_for('update', id=post.id) }}"
                        class="btn btn-sm btn-outline-primary me-2">Редактировать</a>
                     <form action="{{ url_for('delete', id=post.id, type='post') }}" method="POST">
                         <button class="btn btn-sm btn-outline-danger"
