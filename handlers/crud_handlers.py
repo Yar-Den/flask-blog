@@ -98,9 +98,17 @@ def handle_update(id: int):
         post.content = request.form['content']
         post.category_id = request.form['category']
 
-        tag_ids = request.form.getlist('tags')
-        post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
+        new_tag_ids = [int(id) for id in request.form.getlist('tags')]
+        current_tag_ids = {tag.id for tag in post.tags}
 
+        for tag_id in new_tag_ids:
+            if tag_id not in current_tag_ids:
+                tag = Tag.query.get(tag_id)
+                post.tags.append(tag)
+
+        for tag in post.tags.copy():
+            if tag.id not in new_tag_ids:
+                post.tags.remove(tag)
         db.session.commit()
         return redirect('/')
     categories = Category.query.all()
