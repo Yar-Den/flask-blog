@@ -18,7 +18,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ post.title }}</h5>
                     <small class="text-muted">{{ post.date.strftime('%d.%m.%Y %H:%M') }}</small>
-                    <p class="card-text truncate">{{ post.content[:120] }}</p>
+                    <p class="card-text truncate">{{ post.content }}</p>
                     <a href="{{ url_for('read', id=post.id, type='post') }}" class="card-link">Читать...</a>
 
                     <div class="mt-3">

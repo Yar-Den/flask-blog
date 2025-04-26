@@ -22,3 +22,37 @@
     opacity: 1;
     transform: scale(1.1);
 }
+.form-control, .form-select {
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+.form-check-label {
+    user-select: none;
+}
+.post-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    border-radius: 8px;
+}
+.post-meta {
+    font-size: 0.9rem;
+}
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+.form-check-label {
+    user-select: none;
+}

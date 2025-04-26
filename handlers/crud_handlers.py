@@ -103,7 +103,6 @@ def handle_update(id: int):
 
         db.session.commit()
         return redirect('/')
-
     categories = Category.query.all()
     tags = Tag.query.all()
     return render_template('update.html',
