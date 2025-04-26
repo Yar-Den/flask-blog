@@ -8,3 +8,17 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+.text-danger-hover:hover {
+    color: #dc3545!important;
+    opacity: 1!important;
+}
+.badge.bg-danger {
+    opacity: 0.7;
+    transition: all 0.2s;
+    font-size: 1.1em;
+    padding: 0.35em 0.65em;
+}
+.badge.bg-danger:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}

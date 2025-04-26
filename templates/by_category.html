@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Посты в категории {{ category.name }}{% endblock %}
+
+{% block content %}
+<div class="container main-container py-4">
+    <!-- Заголовок категории -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Посты в категории: <span class="text-primary">{{ category.name }}</span></h1>
+        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+            &larr; Все записи
+        </a>
+    </div>
+
+    <!-- Список постов -->
+    <div class="post-list">
+        {% for post in posts %}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h5 class="card-title mb-0">{{ post.title }}</h5>
+                    <small class="text-muted">{{ post.date.strftime('%d.%m.%Y %H:%M') }}</small>
+                </div>
+
+                <p class="card-text truncate mt-2">{{ post.content }}</p>
+                <a href=# class="card-link">Читать...</a>
+
+                <div class="mt-3">
+                    <span class="text-muted small">
+                        Категория: <a href="{{ url_for('read', id=post.category.id, type='category') }}"
+                                    class="text-decoration-none">{{ post.category.name }}</a>
+                        | Теги:
+                        {% if post.tags %}
+                            {% for tag in post.tags %}
+                                <a href="{{ url_for('read', id=tag.id, type='tag') }}"
+                                   class="badge bg-secondary text-decoration-none me-1">{{ tag.name }}</a>
+                            {% endfor %}
+                        {% else %}
+                            <span class="text-muted">нет тегов</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="card-footer bg-white d-flex justify-content-end">
+                <a href="{{ url_for('edit', id=post.id) }}"
+                   class="btn btn-sm btn-outline-primary me-2">Редактировать</a>
+                <form action="{{ url_for('delete', id=post.id) }}" method="POST">
+                    <button class="btn btn-sm btn-outline-danger"
+                            type="submit"
+                            onclick="return confirm('Удалить этот пост навсегда?')">Удалить</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="card shadow-sm">
+            <div class="card-body text-center text-muted py-5">
+                Пока нет постов в этой категории
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
