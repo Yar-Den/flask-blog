@@ -58,25 +58,32 @@ def handle_create(type: str):
         abort(404)
 
 
-def _read_post():
+def _read_all():
     posts = Post.query.all()
     return render_template('index.html', posts=posts)
+
+
+def _read_post():
+    post = Post.query.get_or_404(id)
+    return render_template('post.html', post=post)
 
 
 def _read_by_category(id: int):
     category = Category.query.get_or_404(id)
     posts = Post.query.filter_by(category_id=id).all()
-    return render_template('category.html', posts=posts, category=category)
+    return render_template('by_category.html', posts=posts, category=category)
 
 
 def _read_by_tag(id: int):
     tag = Tag.query.get_or_404(id)
     posts = tag.posts.all()
-    return render_template('tag.html', posts=posts, tag=tag)
+    return render_template('by_tag.html', posts=posts, tag=tag)
 
 
 def handle_read(id: int = None, type: str = 'post'):
-    if type == 'post':
+    if type == 'post' and id is None:
+        return _read_all()
+    elif type == 'post' and id is not None:
         return _read_post()
     elif type == 'category':
         return _read_by_category(id)

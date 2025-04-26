@@ -23,7 +23,7 @@
                 </div>
 
                 <p class="card-text truncate mt-2">{{ post.content }}</p>
-                <a href=# class="card-link">Читать...</a>
+                <a href="{{ url_for('read', id=post.id, type='post') }}" class="card-link">Читать...</a>
 
                 <div class="mt-3">
                     <span class="text-muted small">

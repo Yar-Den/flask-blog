@@ -23,7 +23,7 @@
                 </div>
 
                 <p class="card-text truncate mt-2">{{ post.content }}</p>
-                <a href=# class="card-link">Читать...</a>
+                <a href="{{ url_for('read', id=post.id, type='post') }}" class="card-link">Читать...</a>
 
                 <div class="mt-3">
                     <span class="text-muted small">
@@ -44,7 +44,7 @@
             <div class="card-footer bg-white d-flex justify-content-end">
                 <a href="{{ url_for('edit', id=post.id) }}"
                    class="btn btn-sm btn-outline-primary me-2">Редактировать</a>
-                <form action="{{ url_for('delete', id=post.id) }}" method="POST">
+                <form action="{{ url_for('delete', id=post.id, type='post') }}" method="POST">
                     <button class="btn btn-sm btn-outline-danger"
                             type="submit"
                             onclick="return confirm('Удалить этот пост навсегда?')">Удалить</button>
