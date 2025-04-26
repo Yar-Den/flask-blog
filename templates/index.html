@@ -1,0 +1,41 @@
+{% extends 'base.html' %} 
+
+
+{% block title %}Мои заметки{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Мои заметки</h1>
+
+    <!-- Сетка карточек -->
+    <div class="row g-4">
+
+        {% for note in notes %}
+        <div class="col-12 col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ note.name }}</h5>
+                    <div class="mt">
+                        <a class="btn btn-dark btn-sm" href="/category/{{ note.category_id }}" type="button">{{ note.category.name }}</a>
+                    </div>
+                    <p class="card-text flex-grow-1">
+                    {{ note.text [:150]}}...
+                    <a href="/">Читать</a>
+                    </p>
+                    <div class="d-grid gap-2 col-1 mx-left">
+                        <a class="btn btn-secondary btn-m" href="/update/{{ note.id }}" type="button">Редактировать</a>
+                        <form class="mb-3" method="post" action="/delete/{{ note.id }}">
+                            <button class="btn btn-danger btn-m" type="submit">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="mt-5">
+        <a class="btn btn-primary" href="/create/note" type="button">Добавить заметку</a>
+        <a class="btn btn-primary" href="/create/category" type="button">Добавить категорию</a>
+    </div>
+{% endblock %}
