@@ -1,5 +1,5 @@
 from flask import Flask
-from models import db, Tag, Category
+from models import db, Tag, Category, User
 import os
 from dotenv import load_dotenv
 
@@ -12,27 +12,55 @@ db.init_app(app)
 
 
 def create_categories():
-    category1 = Category(name='Разработка')
-    category2 = Category(name='Прочее')
-    category3 = Category(name='Новости')
+    default_categories = [
+        {'name': 'Разработка'},
+        {'name': 'Прочее'},
+        {'name': 'Новости'}
+    ]
+    for category in default_categories:
+        if not Category.query.filter_by(name=category['name']).first():
+            new_category = Category(name=category['name'])
+            db.session.add(new_category)
 
-    db.session.add(category1)
-    db.session.add(category2)
-    db.session.add(category3)
-    db.session.commit()
-    print('Categories added.')
+    try:
+        db.session.commit()
+        print('Categories added')
+    except Exception as e:
+        db.session.rollback()
+        print(f'Error add categories: {str(e)}')
 
 
 def create_tags():
-    tag1 = Tag(name='Flask')
-    tag2 = Tag(name='Python')
-    tag3 = Tag(name='Россия')
+    default_tags = [
+        {'name': 'Flask'},
+        {'name': 'Python'},
+        {'name': 'Россия'}
+    ]
+    for tag in default_tags:
+        if not Tag.query.filter_by(name=tag['name']).first():
+            new_tag = Tag(name=tag['name'])
+            db.session.add(new_tag)
 
-    db.session.add(tag1)
-    db.session.add(tag2)
-    db.session.add(tag3)
-    db.session.commit()
-    print('Tags added.')
+    try:
+        db.session.commit()
+        print('Tags added')
+    except Exception as e:
+        db.session.rollback()
+        print(f'Error add tags: {str(e)}')
+
+
+def create_default_user():
+    with app.app_context():
+        if not User.query.filter_by(username='admin').first():
+            admin = User(
+                username='admin',
+                email='admin@example.com',
+                is_admin=True
+            )
+            admin.set_password('admin')
+            db.session.add(admin)
+            db.session.commit()
+            print("Admin user created")
 
 
 def create_db():
@@ -41,6 +69,7 @@ def create_db():
         create_categories()
         create_tags()
     print('Database created.')
+    create_default_user()
 
 
 if __name__ == '__main__':
