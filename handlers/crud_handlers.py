@@ -1,5 +1,5 @@
 from models import db, Tag, Category, Post
-from flask import request, redirect, render_template, abort
+from flask import request, redirect, render_template, abort, flash
 
 
 def _create_post():
@@ -13,7 +13,12 @@ def _create_post():
         new_post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
 
         db.session.add(new_post)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            flash('Ошибка: ' + str(e), 'danger')
+        flash('Пост успешно опубликован', 'success')
         return redirect('/')
     categories = Category.query.all()
     tags = Tag.query.all()
@@ -28,7 +33,12 @@ def _create_category():
         new_category = Category(name=name)
 
         db.session.add(new_category)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            flash('Ошибка: ' + str(e), 'danger')
+        flash('Категория успешно добавлена', 'success')
         return redirect('/create/category')
     categories = Category.query.order_by(Category.name).all()
     return render_template('create_category.html', categories=categories)
@@ -41,13 +51,21 @@ def _create_tag():
         new_tag = Tag(name=name)
 
         db.session.add(new_tag)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            flash('Ошибка: ' + str(e), 'danger')
+        flash('Тег успешно добавлен', 'success')
         return redirect('/create/tag')
     tags = Tag.query.order_by(Tag.name).all()
     return render_template('create_tag.html', tags=tags)
 
 
 def handle_create(type: str):
+    """
+    Обработчик создания сущностей по типу(посты, категории, теги)
+    """
     if type == 'post':
         return _create_post()
     elif type == 'category':
@@ -92,6 +110,9 @@ def handle_read(id: int = None, type: str = 'post'):
 
 
 def handle_update(id: int):
+    """
+    Обработчик обновления постов.
+    """
     post = Post.query.get_or_404(id)
     if request.method == 'POST':
         post.title = request.form['title']
@@ -109,7 +130,12 @@ def handle_update(id: int):
         for tag in post.tags.copy():
             if tag.id not in new_tag_ids:
                 post.tags.remove(tag)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            flash('Ошибка: ' + str(e), 'danger')
+        flash('Пост успешно обновлен', 'success')
         return redirect('/')
     categories = Category.query.all()
     tags = Tag.query.all()
@@ -120,7 +146,12 @@ def handle_update(id: int):
 def _delete_post(id: int):
     post = Post.query.get_or_404(id)
     db.session.delete(post)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        flash('Ошибка: ' + str(e), 'danger')
+    flash('Пост успешно удалён', 'success')
     return redirect('/')
 
 
@@ -135,11 +166,19 @@ def _delete_post(id: int):
 def _delete_tag(id: int):
     tag = Tag.query.get_or_404(id)
     db.session.delete(tag)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        flash('Ошибка: ' + str(e), 'danger')
+    flash('Тег успешно удалён', 'success')
     return redirect('/create/tag')
 
 
 def handle_delete(id: int = None, type: str = 'post'):
+    """
+    Обработчик удаления сущностей (посты, категории, теги).
+    """
     if type == 'post':
         return _delete_post(id)
     # elif type == 'category':
