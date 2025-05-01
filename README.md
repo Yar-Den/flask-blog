@@ -38,6 +38,7 @@ DATABASE_URI=sqlite:///instance/blog.db
 ## Инициализация БД
 1. Создайте базу данных:
 ```bash
+flask db init
 flask db upgrade
 ```
 2. Заполните тестовыми данными (также будет создан пользователь admin admin)
