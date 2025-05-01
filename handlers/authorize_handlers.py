@@ -5,15 +5,14 @@ from flask_login import login_user, logout_user
 
 def handle_login():
     if request.method == 'POST':
-        username = request.form['login']
+        username = request.form['username']
         password = request.form['password']
 
         user = User.query.filter_by(username=username).first()
         if user and User.check_password(user.password, password):
             login_user(user)
-            return redirect(url_for('read'))
-        else:
-            flash('Invalid username or password')
+            return redirect(url_for('index'))
+        flash('Invalid username or password')
     return render_template('login.html')
 
 
@@ -26,17 +25,18 @@ def handle_regiter():
         user = User.query.filter_by(username=username).first()
         if user:
             flash('Username already taken', 'danger')
-        else:
-            password_hash = User.password_hash(password)
-            new_user = User(username=username,
-                            password_hash=password_hash,
-                            email=email
-                            )
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Account created successfully', 'success')
-            login_user(new_user)
-            return redirect(url_for('read'))
+            return redirect(url_for('register'))
+
+        new_user = User(username=username,
+                        email=email
+                        )
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash('Account created successfully', 'success')
+        login_user(new_user)
+        return redirect(url_for('index'))
     return render_template('register.html')
 
 

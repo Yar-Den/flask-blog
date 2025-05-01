@@ -1,5 +1,6 @@
 from models import db, Tag, Category, Post
 from flask import request, redirect, render_template, abort, flash
+from flask_login import current_user, login_required
 
 
 def _create_post():
@@ -9,7 +10,12 @@ def _create_post():
         category_id = request.form['category']
         tag_ids = request.form.getlist('tags')
 
-        new_post = Post(title=title, content=content, category_id=category_id)
+        new_post = Post(
+            title=title,
+            content=content,
+            category_id=category_id,
+            user_id=current_user.id
+            )
         new_post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
 
         db.session.add(new_post)
@@ -62,6 +68,7 @@ def _create_tag():
     return render_template('create_tag.html', tags=tags)
 
 
+@login_required
 def handle_create(type: str):
     """
     Обработчик создания сущностей по типу(посты, категории, теги)
@@ -76,12 +83,8 @@ def handle_create(type: str):
         abort(404)
 
 
+@login_required
 def handle_index():
-    posts = Post.query.all()
-    return render_template('index.html', posts=posts)
-
-
-def _read_all():
     posts = Post.query.all()
     return render_template('index.html', posts=posts)
 
@@ -103,13 +106,12 @@ def _read_by_tag(id: int):
     return render_template('by_tag.html', posts=posts, tag=tag)
 
 
+@login_required
 def handle_read(id: int = None, type: str = 'post'):
     """
     Обработчик для просмотра постов.
     """
-    if type == 'post' and id is None:
-        return _read_all()
-    elif type == 'post' and id is not None:
+    if type == 'post' and id is not None:
         return _read_post(id)
     elif type == 'category':
         return _read_by_category(id)
@@ -119,6 +121,7 @@ def handle_read(id: int = None, type: str = 'post'):
         abort(404)
 
 
+@login_required
 def handle_update(id: int):
     """
     Обработчик обновления постов.
@@ -165,14 +168,6 @@ def _delete_post(id: int):
     return redirect('/')
 
 
-# Удаление категорий невозможно - nullable False
-# def _delete_category(id: int):
-#     category = Category.query.get_or_404(id)
-#     db.session.delete(category)
-#     db.session.commit()
-#     return redirect('/create/category')
-
-
 def _delete_tag(id: int):
     tag = Tag.query.get_or_404(id)
     db.session.delete(tag)
@@ -185,14 +180,13 @@ def _delete_tag(id: int):
     return redirect('/create/tag')
 
 
+@login_required
 def handle_delete(id: int = None, type: str = 'post'):
     """
     Обработчик удаления сущностей (посты, категории, теги).
     """
     if type == 'post':
         return _delete_post(id)
-    # elif type == 'category':
-    #     return _delete_category(id)
     elif type == 'tag':
         return _delete_tag(id)
     else:
