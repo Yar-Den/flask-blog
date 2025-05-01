@@ -17,8 +17,8 @@ def _create_post():
             db.session.commit()
         except Exception as e:
             db.session.rollback()
-            flash('Ошибка: ' + str(e), 'danger')
-        flash('Пост успешно опубликован', 'success')
+            flash('Error: ' + str(e), 'danger')
+        flash('Post was published', 'success')
         return redirect('/')
     categories = Category.query.all()
     tags = Tag.query.all()
@@ -37,8 +37,8 @@ def _create_category():
             db.session.commit()
         except Exception as e:
             db.session.rollback()
-            flash('Ошибка: ' + str(e), 'danger')
-        flash('Категория успешно добавлена', 'success')
+            flash('Error: ' + str(e), 'danger')
+        flash('Category was added', 'success')
         return redirect('/create/category')
     categories = Category.query.order_by(Category.name).all()
     return render_template('create_category.html', categories=categories)
@@ -55,8 +55,8 @@ def _create_tag():
             db.session.commit()
         except Exception as e:
             db.session.rollback()
-            flash('Ошибка: ' + str(e), 'danger')
-        flash('Тег успешно добавлен', 'success')
+            flash('Error: ' + str(e), 'danger')
+        flash('Tag was added', 'success')
         return redirect('/create/tag')
     tags = Tag.query.order_by(Tag.name).all()
     return render_template('create_tag.html', tags=tags)
@@ -81,6 +81,11 @@ def handle_index():
     return render_template('index.html', posts=posts)
 
 
+def _read_all():
+    posts = Post.query.all()
+    return render_template('index.html', posts=posts)
+
+
 def _read_post(id: int):
     post = Post.query.get_or_404(id)
     return render_template('post.html', post=post)
@@ -99,7 +104,12 @@ def _read_by_tag(id: int):
 
 
 def handle_read(id: int = None, type: str = 'post'):
-    if type == 'post' and id is not None:
+    """
+    Обработчик для просмотра постов.
+    """
+    if type == 'post' and id is None:
+        return _read_all()
+    elif type == 'post' and id is not None:
         return _read_post(id)
     elif type == 'category':
         return _read_by_category(id)
@@ -134,8 +144,8 @@ def handle_update(id: int):
             db.session.commit()
         except Exception as e:
             db.session.rollback()
-            flash('Ошибка: ' + str(e), 'danger')
-        flash('Пост успешно обновлен', 'success')
+            flash('Error: ' + str(e), 'danger')
+        flash('Post was updated', 'success')
         return redirect('/')
     categories = Category.query.all()
     tags = Tag.query.all()
@@ -150,8 +160,8 @@ def _delete_post(id: int):
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        flash('Ошибка: ' + str(e), 'danger')
-    flash('Пост успешно удалён', 'success')
+        flash('Error: ' + str(e), 'danger')
+    flash('Post was deleted', 'success')
     return redirect('/')
 
 

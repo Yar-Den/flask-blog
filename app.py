@@ -1,9 +1,9 @@
 from flask import Flask, render_template
 from models import db, User
-from handlers import crud_handlers
+from handlers import crud_handlers, authorize_handlers
 from dotenv import load_dotenv
 import os
-from flask_login import LoginManager, current_user, login_required, logout_user, login_user
+from flask_login import LoginManager, login_required
 from flask_migrate import Migrate
 
 
@@ -31,36 +31,43 @@ def index():
     return crud_handlers.handle_index()
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return authorize_handlers.handle_login()
+
+
+@app.route('/regirter', methods=['GET', 'POST'])
+def regirter():
+    return authorize_handlers.handle_regiter()
+
+
+@app.route('/logout')
+def logout():
+    return authorize_handlers.handle_logout()
+
+
 @app.route('/create/<type>', methods=['GET', 'POST'])
+@login_required
 def create(type):
-    if current_user.is_authenticated:
-        return crud_handlers.handle_create(type=type)
-    else:
-        pass
+    return crud_handlers.handle_create(type=type)
 
 
 @app.route('/<type>/<int:id>')
+@login_required
 def read(type: str, id: int):
-    if current_user.is_authenticated:
-        return crud_handlers.handle_read(id=id, type=type)
-    else:
-        pass
+    return crud_handlers.handle_read(id=id, type=type)
 
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update(id: int):
-    if current_user.is_authenticated:
-        return crud_handlers.handle_update(id=id)
-    else:
-        pass
+    return crud_handlers.handle_update(id=id)
 
 
 @app.route('/delete/<type>/<int:id>', methods=['POST'])
+@login_required
 def delete(type: str, id: int):
-    if current_user.is_authenticated:
-        return crud_handlers.handle_delete(id=id, type=type)
-    else:
-        pass
+    return crud_handlers.handle_delete(id=id, type=type)
 
 
 @app.errorhandler(404)
