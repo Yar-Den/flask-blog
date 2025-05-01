@@ -55,6 +55,7 @@ def create_default_user():
             admin = User(
                 username='admin',
                 email='admin@example.com',
+                display_name='Admin',
                 is_admin=True
             )
             admin.set_password('admin')

@@ -21,6 +21,7 @@ def handle_regiter():
         username = request.form['login']
         password = request.form['password']
         email = request.form['email']
+        display_name = request.form['display_name']
 
         user = User.query.filter_by(username=username).first()
         if user:
@@ -28,7 +29,8 @@ def handle_regiter():
             return redirect(url_for('register'))
 
         new_user = User(username=username,
-                        email=email
+                        email=email,
+                        display_name=display_name
                         )
         new_user.set_password(password)
         db.session.add(new_user)

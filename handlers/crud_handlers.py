@@ -1,4 +1,4 @@
-from models import db, Tag, Category, Post
+from models import db, Tag, Category, Post, User
 from flask import request, redirect, render_template, abort, flash
 from flask_login import current_user, login_required
 
@@ -106,6 +106,12 @@ def _read_by_tag(id: int):
     return render_template('by_tag.html', posts=posts, tag=tag)
 
 
+def _read_by_user(id: int):
+    user = User.query.get_or_404(id)
+    posts = User.posts
+    return render_template('by_user.html', posts=posts, user=user)
+
+
 @login_required
 def handle_read(id: int = None, type: str = 'post'):
     """
@@ -117,6 +123,8 @@ def handle_read(id: int = None, type: str = 'post'):
         return _read_by_category(id)
     elif type == 'tag':
         return _read_by_tag(id)
+    elif type == 'user':
+        return _read_by_user(id)
     else:
         abort(404)
 

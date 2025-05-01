@@ -3,7 +3,7 @@ from models import db, User
 from handlers import crud_handlers, authorize_handlers
 from dotenv import load_dotenv
 import os
-from flask_login import LoginManager, login_required
+from flask_login import LoginManager
 from flask_migrate import Migrate
 
 
@@ -47,25 +47,21 @@ def logout():
 
 
 @app.route('/create/<type>', methods=['GET', 'POST'])
-@login_required
 def create(type):
     return crud_handlers.handle_create(type=type)
 
 
 @app.route('/<type>/<int:id>')
-@login_required
 def read(type: str, id: int):
     return crud_handlers.handle_read(id=id, type=type)
 
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
-@login_required
 def update(id: int):
     return crud_handlers.handle_update(id=id)
 
 
 @app.route('/delete/<type>/<int:id>', methods=['POST'])
-@login_required
 def delete(type: str, id: int):
     return crud_handlers.handle_delete(id=id, type=type)
 
