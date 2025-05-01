@@ -36,9 +36,9 @@ def login():
     return authorize_handlers.handle_login()
 
 
-@app.route('/regirter', methods=['GET', 'POST'])
-def regirter():
-    return authorize_handlers.handle_regiter()
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    return authorize_handlers.handle_register()
 
 
 @app.route('/logout')

@@ -55,4 +55,36 @@
 }
 .form-check-label {
     user-select: none;
+}.navbar {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.nav-link {
+    transition: all 0.2s ease;
+    padding: 0.5rem 1rem !important;
+    border-radius: 0.5rem;
+}
+.nav-link:hover {
+    background-color: rgba(13, 110, 253, 0.1);
+}
+.dropdown-menu {
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+}
+.btn-outline-primary {
+    border-width: 2px;
+}.post-content-full {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    white-space: normal; /* Убираем сохранение пробелов */
+    word-break: break-word; /* Перенос длинных слов */
+}
+.post-content-full p {
+    margin-bottom: 1rem; /* Отступы между абзацами */
+}
+.post-content-full img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    border-radius: 8px;
 }

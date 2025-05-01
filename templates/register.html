@@ -10,40 +10,66 @@
 
             <form method="POST" action="{{ url_for('register') }}">
 
-                <div class="mb-3">
-                    <label class="form-label">Имя пользователя (логин)</label>
-                    <input type="text"
-                           class="form-control"
-                           name="username"
-                           required
-                           minlength="4"
-                           maxlength="30">
+                <div class="row g-3">
+                    <!-- Логин -->
+                    <div class="col-md-6">
+                        <label class="form-label">Имя пользователя*</label>
+                        <input type="text"
+                               class="form-control"
+                               name="username"
+                               required
+                               minlength="4"
+                               maxlength="20"
+                               placeholder="Ваш уникальный логин">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-md-6">
+                        <label class="form-label">Email*</label>
+                        <input type="email"
+                               class="form-control"
+                               name="email"
+                               required
+                               placeholder="example@domain.com">
+                    </div>
+
+                    <!-- Отображаемое имя -->
+                    <div class="col-12">
+                        <label class="form-label">Отображаемое имя*</label>
+                        <input type="text"
+                               class="form-control"
+                               name="display_name"
+                               required
+                               minlength="2"
+                               maxlength="50"
+                               placeholder="Как вас будут видеть другие пользователи">
+                    </div>
+
+                    <!-- Пароль -->
+                    <div class="col-12">
+                        <label class="form-label">Пароль*</label>
+                        <input type="password"
+                               class="form-control"
+                               name="password"
+                               required
+                               minlength="6"
+                               placeholder="Не менее 6 символов">
+                        <div class="form-text">Используйте буквы, цифры и специальные символы</div>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Отображаемое имя</label>
-                    <input type="text"
-                           class="form-control"
-                           name="display_name"
-                           required
-                           minlength="2"
-                           maxlength="50">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Пароль</label>
-                    <input type="password"
-                           class="form-control"
-                           name="password"
-                           required
-                           minlength="6">
-                </div>
-
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary btn-lg">Зарегистрироваться</button>
-                    <a href="{{ url_for('login') }}" class="btn btn-link">
-                        Уже есть аккаунт? Войти
-                    </a>
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fa fa-user-plus me-2"></i>Зарегистрироваться
+                    </button>
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            Уже есть аккаунт?
+                            <a href="{{ url_for('login') }}" class="text-decoration-none">
+                                Войти здесь
+                            </a>
+                        </small>
+                    </div>
                 </div>
             </form>
         </div>

@@ -10,14 +10,8 @@
         </a>
     </div>
 
-    {% include 'includes/post_card.html' %}
-
-    <div class="card shadow-sm mt-4">
-        <div class="card-body">
-            <div class="post-content">
-                {{ post.content|safe }}
-            </div>
-        </div>
-    </div>
+    {% with full_content = True %}
+        {% include 'includes/post_card.html' %}
+    {% endwith %}
 </div>
 {% endblock %}

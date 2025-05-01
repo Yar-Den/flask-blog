@@ -16,23 +16,70 @@
 <body>
 
 <!-- навигация -->
-<ul class="navbar-nav">
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('index') }}">Главная</a>
-    </li>
-    {% if current_user.is_authenticated %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('logout') }}">Выйти</a>
-    </li>
-    {% else %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('login') }}">Войти</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('register') }}">Регистрация</a>
-    </li>
-    {% endif %}
-</ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-primary" href="{{ url_for('index') }}">
+            <i class="fa fa-pencil-square-o me-2"></i>Мой Блог
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNav"
+                aria-controls="mainNav"
+                aria-expanded="false"
+                aria-label="Переключить навигацию">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-between" id="mainNav">
+            <!-- Основное меню -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('index') }}">
+                        <i class="fa fa-home me-1"></i>Главная
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Меню пользователя -->
+            <ul class="navbar-nav ms-auto">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-user-circle me-1"></i>{{ current_user.display_name }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('read', id=current_user.id, type='user') }}">
+                                <i class="fa fa-file-text me-2"></i>Мои публикации
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
+                                <i class="fa fa-sign-out me-2"></i>Выйти
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="btn btn-outline-primary me-2" href="{{ url_for('login') }}">
+                        <i class="fa fa-sign-in me-1"></i>Вход
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-primary" href="{{ url_for('register') }}">
+                        <i class="fa fa-user-plus me-1"></i>Регистрация
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
 
 <!-- контент дочерних шаблонов -->
 <div class="container my-3">
