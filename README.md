@@ -51,18 +51,3 @@ python create_db.py
 flask run
 ```
 Приложение будет доступно по адресу: http://localhost:5000
-
-## Структура проекта
-├── app.py
-├── create_db.py
-├── requirements.txt
-├── migrations/
-├── instance/
-├── static/
-│   ├── css/
-│   └── images/
-├── templates/
-│   ├── auth/
-│   ├── includes/
-│   └── *.html
-└── .env.example
